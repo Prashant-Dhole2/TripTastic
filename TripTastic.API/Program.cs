@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using TripTastic.Application.Interfaces.Admin;
 using TripTastic.Application.Interfaces.Auth;
 using TripTastic.Application.Interfaces.Driver;
 using TripTastic.Application.Interfaces.Vehicle;
 using TripTastic.Infrastructure.Data;
+using TripTastic.Infrastructure.Services.Admin;
 using TripTastic.Infrastructure.Services.Auth;
 using TripTastic.Infrastructure.Services.Driver;
 using TripTastic.Infrastructure.Services.Vehicle;
@@ -17,6 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDriverService, DriverService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 
 builder.Services.AddControllers();
