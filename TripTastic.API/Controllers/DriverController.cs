@@ -1,0 +1,32 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using TripTastic.Application.DTOs.Driver;
+using TripTastic.Application.Interfaces.Driver;
+
+namespace TripTastic.API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class DriverController : ControllerBase
+{
+    private readonly IDriverService _driverService;
+
+    public DriverController(IDriverService driverService)
+    {
+        _driverService = driverService;
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> RegisterDriver(
+        RegisterDriverRequest request)
+    {
+        var result = await _driverService.RegisterDriverAsync(request);
+
+        if (!result)
+        {
+            return BadRequest(
+                "Email or license number already exists.");
+        }
+
+        return Ok("Driver registered successfully.");
+    }
+}
