@@ -119,7 +119,9 @@ public class DriverService : IDriverService
     // TT-011: Get Driver & Vehicle Details
     // =========================================================
     public async Task<DriverVehicleDetailsResponse?>
-        GetDriverVehicleDetailsAsync(int driverId)
+    GetDriverVehicleDetailsAsync(
+        int driverId,
+        int vehicleId)
     {
         var driver = await _context.Drivers
             .Include(d => d.User)
@@ -128,23 +130,21 @@ public class DriverService : IDriverService
                 d.Id == driverId &&
                 d.Status == "APPROVED");
 
-        // Driver not found or not approved
         if (driver == null)
         {
             return null;
         }
 
-        // Get the first approved vehicle
         var vehicle = driver.Vehicles
-            .FirstOrDefault(v => v.Status == "APPROVED");
+            .FirstOrDefault(v =>
+                v.Id == vehicleId &&
+                v.Status == "APPROVED");
 
-        // Driver does not have an approved vehicle
         if (vehicle == null)
         {
             return null;
         }
 
-        // Return DTO
         return new DriverVehicleDetailsResponse
         {
             DriverId = driver.Id,

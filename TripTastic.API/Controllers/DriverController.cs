@@ -39,12 +39,13 @@ public class DriverController : ControllerBase
 
         return Ok(drivers);
     }
-    [HttpGet("{driverId}/details")]
+    [HttpGet("{driverId}/vehicles/{vehicleId}/details")]
     public async Task<IActionResult> GetDriverVehicleDetails(
-    int driverId)
+    int driverId,
+    int vehicleId)
     {
         var driver = await _driverService
-            .GetDriverVehicleDetailsAsync(driverId);
+            .GetDriverVehicleDetailsAsync(driverId, vehicleId);
 
         if (driver == null)
         {
@@ -57,6 +58,8 @@ public class DriverController : ControllerBase
         return Ok(driver);
     }
 }
+
+
 
 
 

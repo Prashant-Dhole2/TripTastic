@@ -10,6 +10,9 @@ public interface IDriverService
      string? vehicleType);
 
     Task<DriverVehicleDetailsResponse?> GetDriverVehicleDetailsAsync(
-    int driverId);
+    int driverId,
+    int vehicleId);
+
 }
+
 
