@@ -70,14 +70,17 @@ public class DriverService : IDriverService
 
         return true;
     }
-
-    public async Task<List<SearchAvailableDriverResponse>> SearchAvailableDriversAsync()
+    public async Task<List<SearchAvailableDriverResponse>> SearchAvailableDriversAsync(
+     string? vehicleType)
     {
         var drivers = await _context.Drivers
             .Include(d => d.User)
             .Where(d => d.Status == "APPROVED")
             .Join(
-                _context.Vehicles.Where(v => v.Status == "APPROVED"),
+                _context.Vehicles
+                    .Where(v => v.Status == "APPROVED")
+                    .Where(v => string.IsNullOrEmpty(vehicleType) ||
+                                v.VehicleType == vehicleType),
                 driver => driver.Id,
                 vehicle => vehicle.DriverId,
                 (driver, vehicle) => new SearchAvailableDriverResponse
@@ -97,6 +100,8 @@ public class DriverService : IDriverService
 
         return drivers;
     }
-
 }
+
+
+
 
