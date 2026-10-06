@@ -15,6 +15,9 @@ public class DriverService : IDriverService
         _context = context;
     }
 
+    // =========================================================
+    // TT-006: Register Driver
+    // =========================================================
     public async Task<bool> RegisterDriverAsync(
         RegisterDriverRequest request)
     {
@@ -70,8 +73,12 @@ public class DriverService : IDriverService
 
         return true;
     }
-    public async Task<List<SearchAvailableDriverResponse>> SearchAvailableDriversAsync(
-     string? vehicleType)
+
+    // =========================================================
+    // TT-010: Search Available Drivers
+    // =========================================================
+    public async Task<List<SearchAvailableDriverResponse>>
+        SearchAvailableDriversAsync(string? vehicleType)
     {
         var drivers = await _context.Drivers
             .Include(d => d.User)
@@ -79,29 +86,88 @@ public class DriverService : IDriverService
             .Join(
                 _context.Vehicles
                     .Where(v => v.Status == "APPROVED")
-                    .Where(v => string.IsNullOrEmpty(vehicleType) ||
-                                v.VehicleType == vehicleType),
+                    .Where(v =>
+                        string.IsNullOrEmpty(vehicleType) ||
+                        v.VehicleType == vehicleType),
+
                 driver => driver.Id,
                 vehicle => vehicle.DriverId,
-                (driver, vehicle) => new SearchAvailableDriverResponse
-                {
-                    DriverId = driver.Id,
-                    DriverName = driver.User.FirstName + " " + driver.User.LastName,
 
-                    VehicleId = vehicle.Id,
-                    VehicleNumber = vehicle.VehicleNumber,
-                    VehicleType = vehicle.VehicleType,
-                    Brand = vehicle.Brand,
-                    Model = vehicle.Model,
-                    SeatingCapacity = vehicle.SeatingCapacity,
-                    IsAC = vehicle.IsAC
-                })
+                (driver, vehicle) =>
+                    new SearchAvailableDriverResponse
+                    {
+                        DriverId = driver.Id,
+
+                        DriverName =
+                            driver.User.FirstName + " " +
+                            driver.User.LastName,
+
+                        VehicleId = vehicle.Id,
+                        VehicleNumber = vehicle.VehicleNumber,
+                        VehicleType = vehicle.VehicleType,
+                        Brand = vehicle.Brand,
+                        Model = vehicle.Model,
+                        SeatingCapacity = vehicle.SeatingCapacity,
+                        IsAC = vehicle.IsAC
+                    })
             .ToListAsync();
 
         return drivers;
     }
+
+    // =========================================================
+    // TT-011: Get Driver & Vehicle Details
+    // =========================================================
+    public async Task<DriverVehicleDetailsResponse?>
+        GetDriverVehicleDetailsAsync(int driverId)
+    {
+        var driver = await _context.Drivers
+            .Include(d => d.User)
+            .Include(d => d.Vehicles)
+            .FirstOrDefaultAsync(d =>
+                d.Id == driverId &&
+                d.Status == "APPROVED");
+
+        // Driver not found or not approved
+        if (driver == null)
+        {
+            return null;
+        }
+
+        // Get the first approved vehicle
+        var vehicle = driver.Vehicles
+            .FirstOrDefault(v => v.Status == "APPROVED");
+
+        // Driver does not have an approved vehicle
+        if (vehicle == null)
+        {
+            return null;
+        }
+
+        // Return DTO
+        return new DriverVehicleDetailsResponse
+        {
+            DriverId = driver.Id,
+
+            DriverName =
+                driver.User.FirstName + " " +
+                driver.User.LastName,
+
+            LicenseNumber = driver.LicenseNumber,
+            LicenseExpiryDate = driver.LicenseExpiryDate,
+            ExperienceYears = driver.ExperienceYears,
+            ProfilePhoto = driver.ProfilePhoto,
+
+            VehicleId = vehicle.Id,
+            VehicleNumber = vehicle.VehicleNumber,
+            VehicleType = vehicle.VehicleType,
+            Brand = vehicle.Brand,
+            Model = vehicle.Model,
+            ManufacturingYear = vehicle.ManufacturingYear,
+            Color = vehicle.Color,
+            SeatingCapacity = vehicle.SeatingCapacity,
+            IsAC = vehicle.IsAC,
+            VehiclePhoto = vehicle.VehiclePhoto
+        };
+    }
 }
-
-
-
-

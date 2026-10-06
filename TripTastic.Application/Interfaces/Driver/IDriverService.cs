@@ -8,5 +8,8 @@ public interface IDriverService
 
     Task<List<SearchAvailableDriverResponse>> SearchAvailableDriversAsync(
      string? vehicleType);
+
+    Task<DriverVehicleDetailsResponse?> GetDriverVehicleDetailsAsync(
+    int driverId);
 }
 

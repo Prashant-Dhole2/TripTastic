@@ -55,9 +55,9 @@ public class VehicleConfiguration : IEntityTypeConfiguration<Vehicle>
         builder.Property(x => x.CreatedAt)
             .IsRequired();
 
-        builder.HasOne(x => x.Driver)
-            .WithMany()
-            .HasForeignKey(x => x.DriverId)
-            .OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(v => v.Driver)
+      .WithMany(d => d.Vehicles)
+      .HasForeignKey(v => v.DriverId)
+      .OnDelete(DeleteBehavior.Cascade);
     }
 }
