@@ -29,4 +29,13 @@ public class DriverController : ControllerBase
 
         return Ok("Driver registered successfully.");
     }
+
+    [HttpGet("available")]
+    public async Task<IActionResult> SearchAvailableDrivers()
+    {
+        var drivers = await _driverService
+            .SearchAvailableDriversAsync();
+
+        return Ok(drivers);
+    }
 }

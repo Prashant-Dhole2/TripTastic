@@ -70,4 +70,33 @@ public class DriverService : IDriverService
 
         return true;
     }
+
+    public async Task<List<SearchAvailableDriverResponse>> SearchAvailableDriversAsync()
+    {
+        var drivers = await _context.Drivers
+            .Include(d => d.User)
+            .Where(d => d.Status == "APPROVED")
+            .Join(
+                _context.Vehicles.Where(v => v.Status == "APPROVED"),
+                driver => driver.Id,
+                vehicle => vehicle.DriverId,
+                (driver, vehicle) => new SearchAvailableDriverResponse
+                {
+                    DriverId = driver.Id,
+                    DriverName = driver.User.FirstName + " " + driver.User.LastName,
+
+                    VehicleId = vehicle.Id,
+                    VehicleNumber = vehicle.VehicleNumber,
+                    VehicleType = vehicle.VehicleType,
+                    Brand = vehicle.Brand,
+                    Model = vehicle.Model,
+                    SeatingCapacity = vehicle.SeatingCapacity,
+                    IsAC = vehicle.IsAC
+                })
+            .ToListAsync();
+
+        return drivers;
+    }
+
 }
+
