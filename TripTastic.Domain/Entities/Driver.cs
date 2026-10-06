@@ -19,4 +19,6 @@ public class Driver
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public User User { get; set; } = null!;
+
+    public ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
 }

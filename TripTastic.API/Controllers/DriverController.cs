@@ -39,4 +39,27 @@ public class DriverController : ControllerBase
 
         return Ok(drivers);
     }
+    [HttpGet("{driverId}/vehicles/{vehicleId}/details")]
+    public async Task<IActionResult> GetDriverVehicleDetails(
+    int driverId,
+    int vehicleId)
+    {
+        var driver = await _driverService
+            .GetDriverVehicleDetailsAsync(driverId, vehicleId);
+
+        if (driver == null)
+        {
+            return NotFound(new
+            {
+                message = "Approved driver or vehicle not found."
+            });
+        }
+
+        return Ok(driver);
+    }
 }
+
+
+
+
+
