@@ -31,10 +31,11 @@ public class DriverController : ControllerBase
     }
 
     [HttpGet("available")]
-    public async Task<IActionResult> SearchAvailableDrivers()
+    public async Task<IActionResult> SearchAvailableDrivers(
+    string? vehicleType)
     {
         var drivers = await _driverService
-            .SearchAvailableDriversAsync();
+            .SearchAvailableDriversAsync(vehicleType);
 
         return Ok(drivers);
     }
