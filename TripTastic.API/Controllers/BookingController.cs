@@ -59,4 +59,27 @@ public class BookingController : ControllerBase
             bookingId = acceptedBookingId
         });
     }
+
+    [HttpPut("{bookingId}/reject")]
+    public async Task<IActionResult> RejectBooking(
+    int bookingId,
+    RejectBookingRequest request)
+    {
+        var rejectedBookingId = await _bookingService
+            .RejectBookingAsync(bookingId, request);
+
+        if (rejectedBookingId == null)
+        {
+            return BadRequest(new
+            {
+                message = "Booking cannot be rejected."
+            });
+        }
+
+        return Ok(new
+        {
+            message = "Booking rejected successfully.",
+            bookingId = rejectedBookingId
+        });
+    }
 }
