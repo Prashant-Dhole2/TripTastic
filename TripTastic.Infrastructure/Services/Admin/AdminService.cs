@@ -55,4 +55,41 @@ public class AdminService : IAdminService
 
         return true;
     }
+    public async Task<AdminDashboardResponse> GetDashboardAsync()
+    {
+        var dashboard = new AdminDashboardResponse
+        {
+            TotalCustomers = await _context.Customers.CountAsync(),
+
+            TotalDrivers = await _context.Drivers.CountAsync(),
+            ApprovedDrivers = await _context.Drivers
+                .CountAsync(d => d.Status == "APPROVED"),
+            PendingDrivers = await _context.Drivers
+                .CountAsync(d => d.Status == "PENDING"),
+
+            TotalVehicles = await _context.Vehicles.CountAsync(),
+            ApprovedVehicles = await _context.Vehicles
+                .CountAsync(v => v.Status == "APPROVED"),
+            PendingVehicles = await _context.Vehicles
+                .CountAsync(v => v.Status == "PENDING"),
+
+            TotalBookings = await _context.Bookings.CountAsync(),
+            PendingBookings = await _context.Bookings
+                .CountAsync(b => b.Status == "PENDING"),
+            AcceptedBookings = await _context.Bookings
+                .CountAsync(b => b.Status == "ACCEPTED"),
+            StartedBookings = await _context.Bookings
+                .CountAsync(b => b.Status == "STARTED"),
+            CompletedBookings = await _context.Bookings
+                .CountAsync(b => b.Status == "COMPLETED"),
+            RejectedBookings = await _context.Bookings
+                .CountAsync(b => b.Status == "REJECTED"),
+
+            TotalPayments = await _context.Payments.CountAsync(),
+
+            TotalReviews = await _context.Reviews.CountAsync()
+        };
+
+        return dashboard;
+    }
 }
