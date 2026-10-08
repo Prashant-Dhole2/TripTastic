@@ -128,4 +128,14 @@ public class BookingController : ControllerBase
             bookingId = completedBookingId
         });
     }
+
+    [HttpGet("customer/{customerId}/history")]
+    public async Task<IActionResult> GetCustomerBookingHistory(
+    int customerId)
+    {
+        var bookings = await _bookingService
+            .GetCustomerBookingHistoryAsync(customerId);
+
+        return Ok(bookings);
+    }
 }

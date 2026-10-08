@@ -21,4 +21,7 @@ public interface IBookingService
     Task<int?> CompleteTripAsync(
     int bookingId,
     CompleteBookingRequest request);
+
+    Task<List<CustomerBookingHistoryResponse>>
+    GetCustomerBookingHistoryAsync(int customerId);
 }
