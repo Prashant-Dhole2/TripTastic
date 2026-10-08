@@ -127,4 +127,33 @@ public class BookingService : IBookingService
 
         return booking.Id;
     }
+
+    public async Task<int?> StartTripAsync(
+    int bookingId,
+    StartTripRequest request)
+    {
+        var booking = await _context.Bookings
+            .FirstOrDefaultAsync(b => b.Id == bookingId);
+
+        if (booking == null)
+        {
+            return null;
+        }
+
+        if (booking.DriverId != request.DriverId)
+        {
+            return null;
+        }
+
+        if (booking.Status != "ACCEPTED")
+        {
+            return null;
+        }
+
+        booking.Status = "STARTED";
+
+        await _context.SaveChangesAsync();
+
+        return booking.Id;
+    }
 }
