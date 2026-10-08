@@ -1,0 +1,73 @@
+﻿using Microsoft.EntityFrameworkCore;
+using TripTastic.Application.DTOs.Booking;
+using TripTastic.Application.Interfaces.Booking;
+using BookingEntity = TripTastic.Domain.Entities.Booking;
+using TripTastic.Infrastructure.Data;
+
+namespace TripTastic.Infrastructure.Services.Booking;
+
+public class BookingService : IBookingService
+{
+    private readonly ApplicationDbContext _context;
+
+    public BookingService(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<bool> CreateBookingAsync(
+        CreateBookingRequest request)
+    {
+        // Check customer exists
+        var customer = await _context.Customers
+            .FirstOrDefaultAsync(c => c.Id == request.CustomerId);
+
+        if (customer == null)
+        {
+            return false;
+        }
+
+        // Check driver is approved
+        var driver = await _context.Drivers
+            .FirstOrDefaultAsync(d =>
+                d.Id == request.DriverId &&
+                d.Status == "APPROVED");
+
+        if (driver == null)
+        {
+            return false;
+        }
+
+        // Check vehicle belongs to driver and is approved
+        var vehicle = await _context.Vehicles
+            .FirstOrDefaultAsync(v =>
+                v.Id == request.VehicleId &&
+                v.DriverId == request.DriverId &&
+                v.Status == "APPROVED");
+
+        if (vehicle == null)
+        {
+            return false;
+        }
+
+        // Create booking
+        var booking = new BookingEntity
+        {
+            CustomerId = request.CustomerId,
+            DriverId = request.DriverId,
+            VehicleId = request.VehicleId,
+            PickupLocation = request.PickupLocation,
+            DropLocation = request.DropLocation,
+            TravelDate = request.TravelDate,
+            NumberOfPassengers = request.NumberOfPassengers,
+            Status = "PENDING",
+            CreatedAt = DateTime.UtcNow
+        };
+
+        _context.Bookings.Add(booking);
+
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+}

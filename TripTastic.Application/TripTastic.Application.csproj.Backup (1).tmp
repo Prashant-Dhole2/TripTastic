@@ -7,13 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="DTOs\d\**" />
-    <EmbeddedResource Remove="DTOs\d\**" />
-    <None Remove="DTOs\d\**" />
+    <ProjectReference Include="..\TripTastic.Domain\TripTastic.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TripTastic.Domain\TripTastic.Domain.csproj" />
+    <Folder Include="DTOs\Booking\" />
   </ItemGroup>
 
 </Project>
