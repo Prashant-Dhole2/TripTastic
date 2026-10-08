@@ -19,10 +19,10 @@ public class BookingController : ControllerBase
     public async Task<IActionResult> CreateBooking(
         CreateBookingRequest request)
     {
-        var result = await _bookingService
-            .CreateBookingAsync(request);
+        var bookingId = await _bookingService
+     .CreateBookingAsync(request);
 
-        if (!result)
+        if (bookingId == null)
         {
             return BadRequest(new
             {
@@ -30,9 +30,10 @@ public class BookingController : ControllerBase
             });
         }
 
-        return Ok(new
+        return StatusCode(201, new
         {
-            message = "Booking created successfully."
+            message = "Booking created successfully.",
+            bookingId = bookingId
         });
     }
 }

@@ -4,5 +4,5 @@ namespace TripTastic.Application.Interfaces.Booking;
 
 public interface IBookingService
 {
-    Task<bool> CreateBookingAsync(CreateBookingRequest request);
+    Task<int?> CreateBookingAsync(CreateBookingRequest request);
 }

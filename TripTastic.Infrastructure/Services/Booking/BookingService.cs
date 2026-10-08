@@ -15,8 +15,8 @@ public class BookingService : IBookingService
         _context = context;
     }
 
-    public async Task<bool> CreateBookingAsync(
-        CreateBookingRequest request)
+    public async Task<int?> CreateBookingAsync(
+     CreateBookingRequest request)
     {
         // Check customer exists
         var customer = await _context.Customers
@@ -24,7 +24,7 @@ public class BookingService : IBookingService
 
         if (customer == null)
         {
-            return false;
+            return null;
         }
 
         // Check driver is approved
@@ -35,7 +35,7 @@ public class BookingService : IBookingService
 
         if (driver == null)
         {
-            return false;
+            return null;
         }
 
         // Check vehicle belongs to driver and is approved
@@ -47,7 +47,7 @@ public class BookingService : IBookingService
 
         if (vehicle == null)
         {
-            return false;
+            return null;
         }
 
         // Create booking
@@ -68,6 +68,6 @@ public class BookingService : IBookingService
 
         await _context.SaveChangesAsync();
 
-        return true;
+        return booking.Id;
     }
 }
