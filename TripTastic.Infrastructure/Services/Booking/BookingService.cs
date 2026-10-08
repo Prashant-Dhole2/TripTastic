@@ -208,4 +208,27 @@ public class BookingService : IBookingService
 
     return bookings;
 }
+
+    public async Task<List<DriverTripHistoryResponse>>
+    GetDriverTripHistoryAsync(int driverId)
+    {
+        var bookings = await _context.Bookings
+            .Where(b => b.DriverId == driverId)
+            .OrderByDescending(b => b.CreatedAt)
+            .Select(b => new DriverTripHistoryResponse
+            {
+                BookingId = b.Id,
+                CustomerId = b.CustomerId,
+                VehicleId = b.VehicleId,
+                PickupLocation = b.PickupLocation,
+                DropLocation = b.DropLocation,
+                TravelDate = b.TravelDate,
+                NumberOfPassengers = b.NumberOfPassengers,
+                Status = b.Status,
+                CreatedAt = b.CreatedAt
+            })
+            .ToListAsync();
+
+        return bookings;
+    }
 }

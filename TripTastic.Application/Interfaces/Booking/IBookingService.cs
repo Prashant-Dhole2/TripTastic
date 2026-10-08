@@ -24,4 +24,8 @@ public interface IBookingService
 
     Task<List<CustomerBookingHistoryResponse>>
     GetCustomerBookingHistoryAsync(int customerId);
+
+
+    Task<List<DriverTripHistoryResponse>>
+    GetDriverTripHistoryAsync(int driverId);
 }
