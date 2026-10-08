@@ -82,4 +82,27 @@ public class BookingController : ControllerBase
             bookingId = rejectedBookingId
         });
     }
+
+    [HttpPut("{bookingId}/start")]
+    public async Task<IActionResult> StartTrip(
+    int bookingId,
+    StartTripRequest request)
+    {
+        var startedBookingId = await _bookingService
+            .StartTripAsync(bookingId, request);
+
+        if (startedBookingId == null)
+        {
+            return BadRequest(new
+            {
+                message = "Trip cannot be started."
+            });
+        }
+
+        return Ok(new
+        {
+            message = "Trip started successfully.",
+            bookingId = startedBookingId
+        });
+    }
 }
