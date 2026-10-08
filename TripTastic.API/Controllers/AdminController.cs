@@ -14,6 +14,15 @@ public class AdminController : ControllerBase
     {
         _adminService = adminService;
     }
+    
+    [HttpGet("dashboard")]
+    public async Task<IActionResult> GetDashboard()
+    {
+        var dashboard = await _adminService
+            .GetDashboardAsync();
+
+        return Ok(dashboard);
+    }
 
     [HttpPut("drivers/{driverId}/verify")]
     public async Task<IActionResult> VerifyDriver(
