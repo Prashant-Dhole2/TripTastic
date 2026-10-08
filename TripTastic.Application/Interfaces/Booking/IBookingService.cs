@@ -9,4 +9,8 @@ public interface IBookingService
     Task<int?> AcceptBookingAsync(
       int bookingId,
       AcceptBookingRequest request);
+
+    Task<int?> RejectBookingAsync(
+    int bookingId,
+    RejectBookingRequest request);
 }
