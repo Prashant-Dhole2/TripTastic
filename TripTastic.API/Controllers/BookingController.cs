@@ -105,4 +105,27 @@ public class BookingController : ControllerBase
             bookingId = startedBookingId
         });
     }
+
+    [HttpPut("{bookingId}/complete")]
+    public async Task<IActionResult> CompleteTrip(
+    int bookingId,
+    CompleteBookingRequest request)
+    {
+        var completedBookingId = await _bookingService
+            .CompleteTripAsync(bookingId, request);
+
+        if (completedBookingId == null)
+        {
+            return BadRequest(new
+            {
+                message = "Trip cannot be completed."
+            });
+        }
+
+        return Ok(new
+        {
+            message = "Trip completed successfully.",
+            bookingId = completedBookingId
+        });
+    }
 }
