@@ -3,12 +3,14 @@ using TripTastic.Application.Interfaces.Admin;
 using TripTastic.Application.Interfaces.Auth;
 using TripTastic.Application.Interfaces.Booking;
 using TripTastic.Application.Interfaces.Driver;
+using TripTastic.Application.Interfaces.Payment;
 using TripTastic.Application.Interfaces.Vehicle;
 using TripTastic.Infrastructure.Data;
 using TripTastic.Infrastructure.Services.Admin;
 using TripTastic.Infrastructure.Services.Auth;
 using TripTastic.Infrastructure.Services.Booking;
 using TripTastic.Infrastructure.Services.Driver;
+using TripTastic.Infrastructure.Services.Payment;
 using TripTastic.Infrastructure.Services.Vehicle;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +25,7 @@ builder.Services.AddScoped<IDriverService, DriverService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
-
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
