@@ -70,7 +70,7 @@ public class BookingService : IBookingService
 
         return booking.Id;
     }
-    public async Task<bool> AcceptBookingAsync(
+    public async Task<int?> AcceptBookingAsync(
     int bookingId,
     AcceptBookingRequest request)
     {
@@ -79,23 +79,23 @@ public class BookingService : IBookingService
 
         if (booking == null)
         {
-            return false;
+            return null;
         }
 
         if (booking.DriverId != request.DriverId)
         {
-            return false;
+            return null;
         }
 
         if (booking.Status != "PENDING")
         {
-            return false;
+            return null;
         }
 
         booking.Status = "ACCEPTED";
 
         await _context.SaveChangesAsync();
 
-        return true;
+        return booking.Id;
     }
 }

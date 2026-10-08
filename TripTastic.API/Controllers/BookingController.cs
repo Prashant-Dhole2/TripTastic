@@ -42,10 +42,10 @@ public class BookingController : ControllerBase
     int bookingId,
     AcceptBookingRequest request)
     {
-        var result = await _bookingService
-            .AcceptBookingAsync(bookingId, request);
+        var acceptedBookingId = await _bookingService
+    .AcceptBookingAsync(bookingId, request);
 
-        if (!result)
+        if (acceptedBookingId == null)
         {
             return BadRequest(new
             {
@@ -55,7 +55,8 @@ public class BookingController : ControllerBase
 
         return Ok(new
         {
-            message = "Booking accepted successfully."
+            message = "Booking accepted successfully.",
+            bookingId = acceptedBookingId
         });
     }
 }
