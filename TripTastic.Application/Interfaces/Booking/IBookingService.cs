@@ -17,4 +17,8 @@ public interface IBookingService
     Task<int?> StartTripAsync(
     int bookingId,
     StartTripRequest request);
+
+    Task<int?> CompleteTripAsync(
+    int bookingId,
+    CompleteBookingRequest request);
 }

@@ -156,4 +156,33 @@ public class BookingService : IBookingService
 
         return booking.Id;
     }
+
+    public async Task<int?> CompleteTripAsync(
+    int bookingId,
+    CompleteBookingRequest request)
+    {
+        var booking = await _context.Bookings
+            .FirstOrDefaultAsync(b => b.Id == bookingId);
+
+        if (booking == null)
+        {
+            return null;
+        }
+
+        if (booking.DriverId != request.DriverId)
+        {
+            return null;
+        }
+
+        if (booking.Status != "STARTED")
+        {
+            return null;
+        }
+
+        booking.Status = "COMPLETED";
+
+        await _context.SaveChangesAsync();
+
+        return booking.Id;
+    }
 }
