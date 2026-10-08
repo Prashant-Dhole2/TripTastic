@@ -92,4 +92,30 @@ public class AdminService : IAdminService
 
         return dashboard;
     }
+
+    public async Task<AdminReportResponse> GetReportAsync()
+    {
+        var report = new AdminReportResponse
+        {
+            TotalCustomers = await _context.Customers.CountAsync(),
+
+            TotalDrivers = await _context.Drivers.CountAsync(),
+
+            TotalVehicles = await _context.Vehicles.CountAsync(),
+
+            TotalBookings = await _context.Bookings.CountAsync(),
+
+            CompletedBookings = await _context.Bookings
+                .CountAsync(b => b.Status == "COMPLETED"),
+
+            RejectedBookings = await _context.Bookings
+                .CountAsync(b => b.Status == "REJECTED"),
+
+            TotalPayments = await _context.Payments.CountAsync(),
+
+            TotalReviews = await _context.Reviews.CountAsync()
+        };
+
+        return report;
+    }
 }
