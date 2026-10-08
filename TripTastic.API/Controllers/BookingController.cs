@@ -138,4 +138,13 @@ public class BookingController : ControllerBase
 
         return Ok(bookings);
     }
+    [HttpGet("driver/{driverId}/history")]
+    public async Task<IActionResult> GetDriverTripHistory(
+    int driverId)
+    {
+        var bookings = await _bookingService
+            .GetDriverTripHistoryAsync(driverId);
+
+        return Ok(bookings);
+    }
 }
