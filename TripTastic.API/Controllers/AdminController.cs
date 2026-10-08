@@ -53,4 +53,13 @@ public class AdminController : ControllerBase
 
         return Ok("Vehicle status updated successfully.");
     }
+
+    [HttpGet("report")]
+    public async Task<IActionResult> GetReport()
+    {
+        var report = await _adminService
+            .GetReportAsync();
+
+        return Ok(report);
+    }
 }

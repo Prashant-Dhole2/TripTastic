@@ -8,4 +8,7 @@ public interface IAdminService
     Task<bool> VerifyVehicleAsync(int vehicleId, VerifyVehicleRequest request);
     Task<AdminDashboardResponse>
     GetDashboardAsync();
+
+    Task<AdminReportResponse>
+    GetReportAsync();
 }
