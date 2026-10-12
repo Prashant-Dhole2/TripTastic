@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TripTastic.API.Configurations;
 using TripTastic.Application.Interfaces.Admin;
 using TripTastic.Application.Interfaces.Auth;
 using TripTastic.Application.Interfaces.Booking;
@@ -30,6 +31,9 @@ builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 
+
+builder.Services.AddTripTasticCors();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -37,6 +41,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.UseCors(CorsConfiguration.PolicyName);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
